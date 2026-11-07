@@ -26,6 +26,12 @@ jobs:
           go-version-file: apps/api/go.mod
           cache-dependency-path: apps/api/go.sum
       - run: cd apps/api && go mod verify
+      - name: Ejecutar pruebas y generar cobertura
+        run: |
+          cd apps/api
+          go test -coverprofile=../../coverage.out ./...
+          cd ../..
+          sed -i 's|tarea-api/|apps/api/|g' coverage.out
       - name: Sanitizar variables SonarQube
         run: |
           CLEAN_URL=$(echo "${{ secrets.SONAR_HOST_URL }}" | tr -d '[:space:]')

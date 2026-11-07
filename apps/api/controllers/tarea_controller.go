@@ -6,11 +6,22 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"net/http"
+	"os"
 	"time"
 
 	"tarea-api/config"
 	"tarea-api/models"
 )
+
+func setCORS(w http.ResponseWriter) {
+	origin := os.Getenv("ALLOWED_ORIGIN")
+	if origin == "" {
+		origin = "http://localhost:5173"
+	}
+	w.Header().Set("Access-Control-Allow-Origin", origin)
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
 
 func newID() string {
 	b := make([]byte, 8)
@@ -19,9 +30,7 @@ func newID() string {
 }
 
 func GetTareas(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	setCORS(w)
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
@@ -57,9 +66,7 @@ func GetTareas(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateTarea(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	setCORS(w)
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
