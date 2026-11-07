@@ -7,8 +7,9 @@ COPY apps/web/ ./
 RUN npm run build
 
 # Etapa 2: Producción (Nginx)
-FROM nginx:alpine AS production-stage
+FROM nginxinc/nginx-unprivileged:alpine AS production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+USER 101
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
