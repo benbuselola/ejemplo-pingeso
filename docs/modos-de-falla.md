@@ -26,3 +26,4 @@ Documento de resiliencia y modos de falla del microservicio de tareas según el 
 2. **Salud de la Dependencia (`GET /readyz`):**
    * Realiza un ping activo a PostgreSQL con timeout de 2 segundos.
    * Retorna `200 OK` (`ready`) si la base contesta, o `503 Service Unavailable` si PostgreSQL está temporalmente caído.
+
