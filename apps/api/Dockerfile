@@ -13,9 +13,10 @@ RUN CGO_ENABLED=0 go build -o /app/main .
 # Runtime ligero
 FROM alpine:3.21
 WORKDIR /app
-RUN addgroup -S nonroot -g 10001 && adduser -S nonroot -G nonroot -u 10001
-COPY --from=build --chown=nonroot:nonroot /app/main /app/main
+RUN apk update && apk upgrade --no-cache && \
+    addgroup -S nonroot -g 10001 && adduser -S nonroot -G nonroot -u 10001
+COPY --from=build --chown=10001:10001 /app/main /app/main
 
-USER nonroot:nonroot
+USER 10001:10001
 EXPOSE 8080
 CMD ["/app/main"]
