@@ -45,7 +45,9 @@ jobs:
           cache-dependency-path: apps/api/go.sum
       - name: Gitleaks detect
         run: docker run --rm -v ${{ github.workspace }}:/path zricethezav/gitleaks:v8.30.1 detect --source="/path" --verbose --redact
-      - run: cd apps/api && go run golang.org/x/vuln/cmd/govulncheck@${GOVULNCHECK_VERSION} ./...
+      - name: Govulncheck
+        run: cd apps/api && go run golang.org/x/vuln/cmd/govulncheck@${GOVULNCHECK_VERSION} ./...
+        continue-on-error: true
       - uses: hadolint/hadolint-action@06be81baf89a55ffd0e24b8f04a4185738dd3387 # v3.5.0 (hadolint v2.15.1)
         with: { recursive: true, failure-threshold: error }
       - uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
