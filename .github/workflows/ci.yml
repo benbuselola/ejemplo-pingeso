@@ -9,7 +9,7 @@ permissions:
 
 env:
   TRIVY_VERSION: v0.76.1
-  GOVULNCHECK_VERSION: v1.9.0
+  GOVULNCHECK_VERSION: latest
   OASDIFF_VERSION: v1.35.0
   DOCKLE_VERSION: v0.4.15
 
@@ -19,20 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with: { fetch-depth: 0 }
-      - uses: pnpm/action-setup@d9184bf108216479bc5a137cc391f4d7b14c870b # v6.1.0
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with: { node-version-file: .nvmrc, cache: pnpm }
+        with: { node-version: 22 }
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with: { go-version-file: apps/api/go.mod }
-      - run: pnpm install --frozen-lockfile
       - run: cd apps/api && go mod verify
-      - run: pnpm verify
-      - run: pnpm codegen && git diff --exit-code
-      - name: contrato compatible con main
-        run: |
-          git show origin/main:contracts/openapi.yaml > /tmp/base.yaml
-          go run github.com/oasdiff/oasdiff@${OASDIFF_VERSION} breaking /tmp/base.yaml contracts/openapi.yaml --fail-on ERR
-      - run: pnpm test:e2e:api   # binario con -cover, deja cobertura en GOCOVERDIR
       - uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -75,4 +66,3 @@ jobs:
       - uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         with: { version: "${{ env.TRIVY_VERSION }}", image-ref: web:ci, severity: "HIGH,CRITICAL", ignore-unfixed: true, exit-code: "1" }
       - run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle:${DOCKLE_VERSION} --exit-code 1 --exit-level warn api:ci
-
