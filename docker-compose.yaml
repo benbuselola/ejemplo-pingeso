@@ -1,9 +1,20 @@
 services:
-  mongodb:
-    image: mongo:8.0
-    container_name: mongo_db
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tareas_db
     ports:
-      - "27018:27017"
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tareas_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -13,9 +24,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/tareas_db?sslmode=disable
     depends_on:
-      - mongodb
+      postgres:
+        condition: service_healthy
 
   frontend:
     build:
@@ -28,4 +40,4 @@ services:
       - backend
 
 volumes:
-  mongo_data:
+  postgres_data:

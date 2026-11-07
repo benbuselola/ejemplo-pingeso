@@ -38,7 +38,7 @@ onMounted(() => {
       </li>
     </ul>
     
-    <div v-else>No hay tareas registradas en MongoDB.</div>
+    <div v-else>No hay tareas registradas en la base de datos.</div>
   </div>
 </template>
 

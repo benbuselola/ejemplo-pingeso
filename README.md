@@ -34,7 +34,7 @@ ejemplo-pingeso/
 │       └── ci.yml              # Pipeline de Integración Continua (calidad, seguridad, imagen)
 ├── .dockerignore               # Archivos excluidos del contexto Docker (.git, .env*, node_modules)
 ├── .trivyignore.yaml           # Excepciones autorizadas para Trivy (con CVE y fecha)
-├── docker-compose.yaml         # Orquestación de desarrollo local (MongoDB, API y Web)
+├── docker-compose.yaml         # Orquestación de desarrollo local (PostgreSQL, API y Web)
 ├── sonar-project.properties    # Configuración del escáner SonarQube
 └── README.md                   # Documentación general del repositorio
 ```
@@ -47,7 +47,7 @@ ejemplo-pingeso/
 | :--- | :--- | :--- |
 | **Backend** | Go `1.26.5` | `go 1.26.0` con `toolchain go1.26.5`. Dependencias críticas actualizadas (`golang.org/x/crypto v0.55.0`, `golang.org/x/text v0.41.0`). |
 | **Frontend** | Vue 3 + Vite | Servido mediante Nginx en contenedor no privilegiado. |
-| **Base de Datos** | MongoDB `8.0` | Contenedor aislado por servicio en Compose. |
+| **Base de Datos** | PostgreSQL `17-alpine` | Contenedor aislado por servicio en Compose con healthcheck `pg_isready`. |
 | **Contrato** | OpenAPI `3.1.0` | Especificación estricta de rutas, parámetros y códigos de respuesta RFC 9457. |
 | **Contenedores** | Docker Multi-Stage | Puertos internos siempre en `8080`. Imágenes ejecutadas con usuarios sin privilegios (`nonroot` / `UID 101`). |
 
@@ -206,5 +206,5 @@ docker compose logs -f
 
 * **Frontend**: `http://localhost:3000`
 * **Backend API**: `http://localhost:8080`
-* **MongoDB**: `localhost:27018`
+* **PostgreSQL**: `localhost:5432`
 

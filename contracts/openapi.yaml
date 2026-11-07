@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: API Gestor de Tareas
-  description: Microservicio de ejemplo para la gestión de tareas, diseñado para enseñar el estándar OpenAPI y la integración con Go, Vue y MongoDB.
+  description: Microservicio de ejemplo para la gestión de tareas, diseñado para enseñar el estándar OpenAPI y la integración con Go, Vue y PostgreSQL.
   version: 1.0.0
   contact:
     name: Equipo Docente
@@ -124,10 +124,10 @@ components:
       name: id
       in: path
       required: true
-      description: ID único de la tarea (Formato ObjectID de MongoDB)
+      description: ID único de la tarea
       schema:
         type: string
-        example: "654b9a9f2b8c9d0012345678"
+        example: "1"
 
   schemas:
     # Lo que el usuario envía para crear o editar
@@ -155,7 +155,7 @@ components:
             id:
               type: string
               description: Identificador único autogenerado en la base de datos
-              example: "654b9a9f2b8c9d0012345678"
+              example: "1"
             fecha_creacion:
               type: string
               format: date-time
@@ -188,7 +188,7 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorEstandar'
     InternalServerError:
-      description: Error interno del servidor (ej. pérdida de conexión con MongoDB)
+      description: Error interno del servidor (ej. pérdida de conexión con PostgreSQL)
       content:
         application/json:
           schema:

@@ -1,9 +1,10 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import "time"
 
 type Tarea struct {
-	ID     primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Titulo string             `json:"titulo" bson:"titulo"`
-	Estado string             `json:"estado" bson:"estado"`
+	ID            string    `json:"id"`
+	Titulo        string    `json:"titulo"`
+	Estado        string    `json:"estado"`
+	FechaCreacion time.Time `json:"fecha_creacion,omitempty"`
 }
