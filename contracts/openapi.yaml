@@ -15,8 +15,42 @@ servers:
 tags:
   - name: Tareas
     description: Operaciones CRUD completas para la entidad Tareas
+  - name: Salud
+    description: Verificaciones de salud y observabilidad mínima
 
 paths:
+  /healthz:
+    get:
+      tags:
+        - Salud
+      summary: Liveness check
+      description: Retorna 200 si el proceso del servicio se encuentra vivo y respondiendo.
+      responses:
+        '200':
+          description: Servicio vivo
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ok"
+
+  /readyz:
+    get:
+      tags:
+        - Salud
+      summary: Readiness check
+      description: Retorna 200 si la base de datos PostgreSQL está conectada y lista para operar.
+      responses:
+        '200':
+          description: Base de datos lista
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ready"
+        '503':
+          description: Base de datos no disponible
+
   /api/v1/tareas:
     get:
       tags:

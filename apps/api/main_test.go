@@ -28,6 +28,19 @@ func TestHealthz(t *testing.T) {
 	}
 }
 
+func TestReadyz(t *testing.T) {
+	mux := setupRouter()
+	req := httptest.NewRequest(http.MethodGet, "/readyz", nil)
+	rec := httptest.NewRecorder()
+
+	mux.ServeHTTP(rec, req)
+
+	// Sin DB conectada da 503, con DB da 200
+	if rec.Code != http.StatusOK && rec.Code != http.StatusServiceUnavailable {
+		t.Fatalf("esperaba status 200 o 503 para /readyz, obtuve %d", rec.Code)
+	}
+}
+
 func TestRouterRoutes(t *testing.T) {
 	mux := setupRouter()
 

@@ -2,6 +2,10 @@
 
 Repositorio base del microservicio de gestión de tareas siguiendo los lineamientos técnicos del curso **DAS (Desarrollo de Microservicios)** para el **Hito 0: Entorno y Seguridad**.
 
+### Enlaces de Evidencia (Hito 0)
+* **Pipeline de CI (GitHub Actions):** [https://github.com/benbuselola/ejemplo-pingeso/actions](https://github.com/benbuselola/ejemplo-pingeso/actions)
+* **Panel de SonarQube:** [http://localhost:9000/dashboard?id=ejemplo-pingeso](http://localhost:9000/dashboard?id=ejemplo-pingeso) (Clave: `ejemplo-pingeso`)
+
 ---
 
 ## 1. Composición y Estructura del Repositorio

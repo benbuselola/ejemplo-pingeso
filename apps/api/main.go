@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"tarea-api/config"
 	"tarea-api/controllers"
@@ -18,10 +20,24 @@ func setupRouter() *http.ServeMux {
 	mux.HandleFunc("POST /api/v1/tareas", controllers.CreateTarea)
 	mux.HandleFunc("OPTIONS /api/v1/tareas", controllers.GetTareas)
 
-	// Healthcheck según estándar de la asignatura
+	// Healthchecks según estándar de la asignatura (sección 4 y 8)
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write([]byte("ok"))
+	})
+	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+		if config.DB == nil {
+			http.Error(w, "base de datos no inicializada", http.StatusServiceUnavailable)
+			return
+		}
+		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer cancel()
+		if err := config.DB.PingContext(ctx); err != nil {
+			http.Error(w, "base de datos no disponible", http.StatusServiceUnavailable)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("ready"))
 	})
 	return mux
 }

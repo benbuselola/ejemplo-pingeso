@@ -22,3 +22,4 @@ func TestConnectDB(t *testing.T) {
 		initSchema()
 	}
 }
+
