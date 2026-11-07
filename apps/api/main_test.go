@@ -27,3 +27,17 @@ func TestHealthz(t *testing.T) {
 		t.Errorf("esperaba 'ok', obtuve '%s'", string(body))
 	}
 }
+
+func TestRouterRoutes(t *testing.T) {
+	mux := setupRouter()
+
+	// Probar OPTIONS en /api/tareas y /api/v1/tareas
+	for _, path := range []string{"/api/tareas", "/api/v1/tareas"} {
+		req := httptest.NewRequest(http.MethodOptions, path, nil)
+		rec := httptest.NewRecorder()
+		mux.ServeHTTP(rec, req)
+		if rec.Code != http.StatusOK {
+			t.Errorf("esperaba status 200 para OPTIONS %s, obtuve %d", path, rec.Code)
+		}
+	}
+}

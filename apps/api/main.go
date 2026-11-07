@@ -13,8 +13,10 @@ func setupRouter() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/tareas", controllers.GetTareas)
 	mux.HandleFunc("POST /api/tareas", controllers.CreateTarea)
+	mux.HandleFunc("OPTIONS /api/tareas", controllers.GetTareas)
 	mux.HandleFunc("GET /api/v1/tareas", controllers.GetTareas)
 	mux.HandleFunc("POST /api/v1/tareas", controllers.CreateTarea)
+	mux.HandleFunc("OPTIONS /api/v1/tareas", controllers.GetTareas)
 
 	// Healthcheck según estándar de la asignatura
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {

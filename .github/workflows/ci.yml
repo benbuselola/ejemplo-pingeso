@@ -16,6 +16,20 @@ env:
 jobs:
   calidad:
     runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tareas_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with: { fetch-depth: 0 }
@@ -27,9 +41,11 @@ jobs:
           cache-dependency-path: apps/api/go.sum
       - run: cd apps/api && go mod verify
       - name: Ejecutar pruebas y generar cobertura
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tareas_db?sslmode=disable
         run: |
           cd apps/api
-          go test -coverprofile=../../coverage.out ./...
+          go test -v -coverprofile=../../coverage.out ./...
           cd ../..
           sed -i 's|tarea-api/|apps/api/|g' coverage.out
       - name: Sanitizar variables SonarQube
