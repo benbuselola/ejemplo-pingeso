@@ -8,22 +8,8 @@ Repositorio base del microservicio de gestión de tareas siguiendo los lineamien
 
 ---
 
-## 1. Estado de Cumplimiento: Hito 0 (Checklist Oficial)
+## 1. Cosa faltante
 
-En conformidad con las Secciones 7 y 9 de la pauta transversal de microservicios:
-
-| Ítem Requerido | Estado | Evidencia / Implementación |
-| :--- | :---: | :--- |
-| **Migración Completa a PostgreSQL** | ✅ Cumplido | Conexión con driver oficial `pgx/v5` (`v5.10.0`). Eliminación total de dependencias y código de MongoDB. |
-| **Pipeline CI en verde (`main`)** | ✅ Cumplido | Workflow [`.github/workflows/ci.yml`](file:///home/benja/Escritorio/ejemplo-pingeso/.github/workflows/ci.yml) con los 3 jobs requeridos: `calidad`, `seguridad`, `imagen`. |
-| **Calidad de Código y Quality Gate** | ✅ Cumplido | SonarQube configurado vía [`sonar-project.properties`](file:///home/benja/Escritorio/ejemplo-pingeso/sonar-project.properties). 0 bugs, 0 vulnerabilidades, 0 hotspots pendientes y >80% de cobertura en código nuevo. |
-| **Escaneo de Vulnerabilidades (Trivy)** | ✅ Cumplido | 0 vulnerabilidades `HIGH` o `CRITICAL` con solución en análisis de filesystem (`trivy fs`) e imágenes (`trivy image`). |
-| **Análisis Estático y Buenas Prácticas** | ✅ Cumplido | Hadolint (umbral `error`), Govulncheck (`v1.9.0`), Gitleaks (`v8.30.1`) sin detecciones de secretos ni CVEs estándar. |
-| **Seguridad de Contenedores** | ✅ Cumplido | Ejecución exclusiva bajo usuarios numéricos sin privilegios: `USER 10001:10001` (API) y `USER 101:101` (Web). |
-| **Observabilidad y Salud** | ✅ Cumplido | Endpoints nativos `GET /healthz` (liveness) y `GET /readyz` (readiness con ping activo a PostgreSQL). |
-| **Contrato API-First** | ✅ Cumplido | Especificación OpenAPI 3.1 publicada en [`contracts/openapi.yaml`](file:///home/benja/Escritorio/ejemplo-pingeso/contracts/openapi.yaml), documentando esquemas y estados de salud. |
-| **Resiliencia y Modos de Falla** | ✅ Cumplido | Matriz documentada en [`docs/modos-de-falla.md`](file:///home/benja/Escritorio/ejemplo-pingeso/docs/modos-de-falla.md) con timeouts explícitos de 5s y respuestas RFC 9457. |
-| **Configuración Segura** | ✅ Cumplido | Plantilla [`.env.example`](file:///home/benja/Escritorio/ejemplo-pingeso/.env.example) con marcadores `replace-with-*`. Exclusión de `.env` en `.gitignore` y `.dockerignore`. |
 | **Protección de Rama `main`** | ⚠️ Configuración | Requiere activar en GitHub: Settings > Branches > Require PR (1 aprobación) y checks obligatorios `calidad`, `seguridad`, `imagen`. |
 
 ---
